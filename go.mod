@@ -1,3 +1,3 @@
-module github.com/soapffz/go_common_functions
+module github.com/soapffz/common-go-functions
 
 go 1.19
