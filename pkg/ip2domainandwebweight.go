@@ -20,9 +20,7 @@ func Ip2DomainAndWebWeight(ip string) (string, int) {
 	// 参考项目https://github.com/Sma11New/ip2domain
 	ip = strings.ReplaceAll(ip, " ", "")
 	domain := Ip2Domain(ip)
-	if domain == "" {
-		log.Fatal("域名解析失败，不查询权重")
-	} else {
+	if domain != "" {
 		web_weight := AiZhanRankQuery(domain)
 		return domain, web_weight
 	}
