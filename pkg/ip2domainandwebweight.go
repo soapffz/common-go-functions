@@ -3,7 +3,6 @@ package pkg
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -36,17 +35,15 @@ func Ip2Domain(ip string) string {
 	reqest.Header.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36")
 	response, _ := client.Do(reqest)
 	if err != nil {
-		panic(err)
+		return ""
 	}
 	defer response.Body.Close()
-	if response.StatusCode != 200 {
-		log.Fatal("解析失败")
-	} else {
+	if response.StatusCode == 200 {
 		var ll []IpDomain = make([]IpDomain, 0)
 		res_byte, _ := ioutil.ReadAll(response.Body)
 		err = json.Unmarshal(res_byte, &ll)
 		if err != nil {
-			log.Fatal("解析报错，请检查数据")
+			return ""
 		}
 		if len(ll) > 1 {
 			// 存在多个数据时，取最短长度值
@@ -87,9 +84,7 @@ func AiZhanRankQuery(domain string) int {
 		panic(err)
 	}
 	defer response.Body.Close()
-	if response.StatusCode != 200 {
-		log.Fatal("爱站访问频率过高，请稍后再试")
-	} else {
+	if response.StatusCode == 200 {
 		res, _ := ioutil.ReadAll(response.Body)
 		resstring := string(res)
 		reg := regexp.MustCompile("aizhan.com/images/br/(.*?).png").FindStringSubmatch(resstring)
