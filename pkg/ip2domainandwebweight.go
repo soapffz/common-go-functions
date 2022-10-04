@@ -51,7 +51,7 @@ func Ip2DomainAndWebWeight(ip string) (string, string, int) {
 			// 使用域名列表获得根域名列表
 			root_domain := GetRootDomain(domain)
 			if root_domain != "" {
-				web_weight := AiZhanRankQuery(root_domain)
+				web_weight := WebWeightByAiZhan(root_domain)
 				if web_weight >= BIG_WEIGHT {
 					BIG_WEIGHT = web_weight
 					BIG_WEIGHT_DOMAIN = domain
@@ -201,8 +201,8 @@ func Ip2DomainByDnsGrep(ip string) string {
 	return ""
 }
 
-func AiZhanRankQuery(domain string) int {
-	// 传入域名，返回爱站查询到的权重数据
+func WebWeightByAiZhan(domain string) int {
+	// 传入域名，返回爱站查询到的权重数据，从百度、移动、360、搜狗中选择一个最高的权重
 	// 正常返回权重，查询失败或其他情况返回0
 	client := &http.Client{}
 	url := "https://www.aizhan.com/cha/" + domain + "/"
@@ -218,15 +218,28 @@ func AiZhanRankQuery(domain string) int {
 	if response.StatusCode == 200 {
 		res, _ := ioutil.ReadAll(response.Body)
 		resstring := string(res)
-		reg := regexp.MustCompile("aizhan.com/images/br/(.*?).png").FindStringSubmatch(resstring)
-		if len(reg) == 2 {
-			str_web_weight := reg[1]
-			// fmt.Println(domain + " 的权重是：" + web_weight)
-			web_weight, _ := strconv.Atoi(str_web_weight)
-			return web_weight
-		} else {
-			return 0
+		reg_baidu_pc := regexp.MustCompile("aizhan.com/images/br/(.*?).png").FindStringSubmatch(resstring)
+		reg_baidu_mobile := regexp.MustCompile("aizhan.com/images/mbr/(.*?).png").FindStringSubmatch(resstring)
+		reg_sougou_pc := regexp.MustCompile("aizhan.com/images/sr/(.*?).png").FindStringSubmatch(resstring)
+		reg_sougou_mobile := regexp.MustCompile("aizhan.com/images/msr/(.*?).png").FindStringSubmatch(resstring)
+		reg_360_pc := regexp.MustCompile("aizhan.com/images/360/(.*?).png").FindStringSubmatch(resstring)
+		reg_360_mobile := regexp.MustCompile("aizhan.com/images/m360/(.*?).png").FindStringSubmatch(resstring)
+		reg_sm := regexp.MustCompile("aizhan.com/images/sm/(.*?).png").FindStringSubmatch(resstring)
+		reg_tt := regexp.MustCompile("aizhan.com/images/tt/(.*?).png").FindStringSubmatch(resstring)
+		BIG_WEIGHT := 0
+		for _, i := range [][]string{reg_baidu_pc, reg_baidu_mobile, reg_sougou_pc, reg_sougou_mobile, reg_360_pc, reg_360_mobile, reg_sm, reg_tt} {
+			if len(i) == 2 {
+				str_web_weight := i[1]
+				int_web_weight, err := strconv.Atoi(str_web_weight)
+				if err != nil {
+					continue
+				}
+				if int_web_weight >= BIG_WEIGHT {
+					BIG_WEIGHT = int_web_weight
+				}
+			}
 		}
+		return BIG_WEIGHT
 	}
 	return 0
 }
