@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
@@ -24,7 +23,7 @@ func DownloadGithubRelease(repo string, localpath string, index string) []string
 		fmt.Println(err)
 	}
 	defer func() { _ = r.Body.Close() }()
-	body, _ := ioutil.ReadAll(r.Body)
+	body, _ := io.ReadAll(r.Body)
 
 	var xxm mybody
 	_ = json.Unmarshal(body, &xxm)

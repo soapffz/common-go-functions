@@ -2,7 +2,7 @@ package pkg
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -101,9 +101,7 @@ func CleanDomain(domain string) string {
 		domain = strings.Split(domain, ":")[0]
 	}
 	// 去除www前缀
-	if strings.HasPrefix(domain, "www.") {
-		domain = strings.Trim(domain, "www.")
-	}
+	domain = strings.TrimPrefix(domain, "www.")
 	// 如果传入的是个ip，返回空字符串
 	match, _ := regexp.MatchString("[A-Za-z]", domain)
 	if !match {
@@ -130,7 +128,7 @@ func Ip2DomainByWebScancc(ip string) string {
 	defer response.Body.Close()
 	if response.StatusCode == 200 {
 		var ll []IpDomain = make([]IpDomain, 0)
-		res_byte, _ := ioutil.ReadAll(response.Body)
+		res_byte, _ := io.ReadAll(response.Body)
 		err = json.Unmarshal(res_byte, &ll)
 		if err != nil {
 			return ""
@@ -174,7 +172,7 @@ func Ip2DomainByDnsGrep(ip string) string {
 	defer response.Body.Close()
 	if response.StatusCode == 200 {
 		var dd TooLTT
-		res_byte, _ := ioutil.ReadAll(response.Body)
+		res_byte, _ := io.ReadAll(response.Body)
 		err = json.Unmarshal(res_byte, &dd)
 		if err != nil {
 			return ""
@@ -216,7 +214,7 @@ func WebWeightByAiZhan(domain string) int {
 	}
 	defer response.Body.Close()
 	if response.StatusCode == 200 {
-		res, _ := ioutil.ReadAll(response.Body)
+		res, _ := io.ReadAll(response.Body)
 		resstring := string(res)
 		reg_baidu_pc := regexp.MustCompile("aizhan.com/images/br/(.*?).png").FindStringSubmatch(resstring)
 		reg_baidu_mobile := regexp.MustCompile("aizhan.com/images/mbr/(.*?).png").FindStringSubmatch(resstring)
