@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 // 传入文件名，按行读取返回数组列表 by soapffz 2022-10-23
@@ -19,12 +20,11 @@ func ReadFileReturnStringSlice(filename string) []string {
 	var fileList []string
 	for {
 		inputString, readerError := finReader.ReadString('\n')
-		//fmt.Println(inputString)
 		if readerError == io.EOF {
 			break
 		}
+		inputString = strings.Replace(inputString, "\n", "", -1) // 去掉回车
 		fileList = append(fileList, inputString)
 	}
-	//fmt.Println("fileList",fileList)
 	return fileList
 }
