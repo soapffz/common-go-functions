@@ -1,2 +1,18 @@
-# go_common_functions
+# 🍌common-go-functions
 Commonly used go functions.常用go函数
+
+# 🍒功能清单
+
+| 函数名称                                                                                                     | 函数用法                                                            | 创建日期   | 最后更新日期 | 备注                                                               |
+| :----------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------ | :--------- | :----------- | :----------------------------------------------------------------- |
+| CountFileLine(filename string) (line_num int)                                                                | 传入文件路径，返回文件行数                                          | 2022-09-26 | 2022-09-26   |                                                                    |
+| GetCurrentAbPath() string 、 GetCurrentAbPathByExecutable() string、GetCurrentAbPathByCaller() string        | 获取当前绝对路径、当前执行文件绝对路径                              | 2022-09-26 | 2022-09-26   |                                                                    |
+| WriteSliceReturnRandomFilename(data_l []string) (filename string)                                            | 切片写入文件返回文件名称                                            | 2022-09-26 | 2022-09-26   |                                                                    |
+| ReadSpecifiedLineInFile(filepath string, begin_line int, end_line int) []string                              | 读取指定文件指定的行，从指定开始行读到指定结束行                    | 2022-09-26 | 2022-09-26   | 若开始行大于文件行数则报错，若指定结束行大于文件行数则读到结尾返回 |
+| PushMsgByServerJ(serverj_key string, title string, content string)                                           | 通过 Server 酱推送消息                                              | 2022-09-26 | 2022-09-26   |                                                                    |
+| Ip2DomainAndWebWeight(ip string) (string, string, int)                                                       | 传入 ip 地址，返回域名，根域名，根域名权重                          | 2022-10-02 | 2022-10-18   |                                                                    |
+| GetMysqlConnByGorm(username string, password string, host string, port string, dbname string) (db \*gorm.DB) | 使用 gorm 模块连接 mysql 数据库                                     | 2022-10-16 | 2022-10-16   |                                                                    |
+| RemoveRepeatedElementInSlice(arr []string) []string                                                          | 移除数组中重复元素并返回数组                                        | 2022-10-18 | 2022-10-18   |                                                                    |
+| DownloadGithubRelease(repo string, localpath string, index string) []string                                  | 使用 gorm 模块连接 mysql 数据库                                     | 2022-09-26 | 2022-10-18   |                                                                    |
+| ReadFileReturnStringSlice(filename string) []string                                                          | 传入文件名，按行读取返回数组列表                                    | 2022-10-23 | 2022-10-23   | 全量读取仅适用于小文件，大文件会造成内存崩溃                       |
+| SortAMapOfStringAndIntByValue(m map[string]int, Order string) map[string]intstring                           | 将 string+int 类型的 map 排序后返回，可指定升序还是降序，默认为降序 | 2022-11-17 | 2022-11-17   |                                                                    |
