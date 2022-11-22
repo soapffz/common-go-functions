@@ -1,11 +1,12 @@
-module github.com/soapffz/common-go-functions/pkg
+module pkg
 
 go 1.19
 
 require (
 	github.com/Cgboal/DomainParser v0.0.0-20210827145802-99068439e39f
-	gorm.io/driver/mysql v1.4.3
-	gorm.io/gorm v1.24.0
+	github.com/zeromicro/go-zero v1.4.2
+	gorm.io/driver/mysql v1.4.4
+	gorm.io/gorm v1.24.2
 )
 
 require (
